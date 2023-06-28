@@ -1,12 +1,8 @@
 <script setup lang="ts">
+import workspace from '@/views/workspace.vue'
 </script>
 
 
 <template>
-  <div class="m-10">
-    <div>1</div>
-    <div>2</div>
-    <va-button>测试</va-button>
-    <va-icon name="book" />
-  </div>
+  <workspace />
 </template>
