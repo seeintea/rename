@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import optionsBar from '@/components/options-bar.vue';
-import uploadItem from '@/components/upload-item.vue';
+import UploadList from '@/components/upload-list.vue';
+import userAction from '@/components/user-action.vue';
 </script>
 
 <template>
   <div class="p-3">
-    <options-bar />
-    <upload-item />
+    <user-action />
+    <upload-list />
   </div>
 </template>
