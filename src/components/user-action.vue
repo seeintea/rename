@@ -6,11 +6,6 @@ import { renameTypes, renameAction } from '@/helper/rename-types'
 import { isValidReplaceName } from '@/helper/rule-valid';
 import emitter from '@/helper/event-bus';
 
-const emits = defineEmits<{
-  (e: 'exportAsZip'): void
-  (e: 'exportAsFolder'): void
-}>()
-
 const { init } = useToast()
 
 const inputRule = ref('')
@@ -28,9 +23,13 @@ const onPreview = () => {
   }
 }
 
-const onExportAsZip = () => emits('exportAsZip')
+const onExportAsZip = () => {
+  emitter.emit('exportAsZip')
+}
 
-const onExportAsFolder = () => emits('exportAsFolder')
+const onExportAsFolder = () => {
+  emitter.emit('exportAsFolder')
+}
 
 watchEffect(() => {
   const { valid } = isValidReplaceName(inputRule.value)

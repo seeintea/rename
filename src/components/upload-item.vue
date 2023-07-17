@@ -1,52 +1,67 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { ref, watch, computed } from 'vue';
+import { useToast } from 'vuestic-ui'
 import { IFileItem } from '@/helper/upload-files';
 import { validFilename } from '@/helper/rule-valid'
 import uploadItemWrapper from './upload-item-wrapper.vue'
 
-const { fileInfo } = defineProps<{
+const props = defineProps<{
   fileInfo: IFileItem
 }>()
 
 const emits = defineEmits<{
-  (e: 'change', item: IFileItem): void,
+  (e: 'change', item: IFileItem): void
 }>()
 
-const updateName = ref(fileInfo?.customName ?? fileInfo.updateName)
+const { init } = useToast()
+
+const fileInfo = computed(() => props.fileInfo)
+const latestName = ref(fileInfo.value?.customName ?? fileInfo.value.updateName)
 const beforeUpdateName = ref('')
 const isEditMode = ref(false)
 const input = ref<HTMLInputElement | null>(null)
 
 const onResetName = (event: Event) => {
   event.stopPropagation()
-  const nextFileInfo = { ...fileInfo }
+  const nextFileInfo = { ...fileInfo.value }
   delete nextFileInfo.customName
-  updateName.value = nextFileInfo.updateName
+  latestName.value = nextFileInfo.updateName
   emits('change', nextFileInfo as IFileItem)
 }
 
 const afterInputShow = () => {
-  beforeUpdateName.value = updateName.value
+  beforeUpdateName.value = latestName.value
   setTimeout(() => {
     input?.value?.focus()
   }, 100)
 }
 
 const afterInputHide = () => {
-  if (
-    !updateName.value ||
-    validFilename.test(updateName.value) ||
-    beforeUpdateName.value === updateName.value
-  ) {
-    updateName.value = beforeUpdateName.value
+
+  const _withoutUpdate = () => {
+    latestName.value = beforeUpdateName.value
     beforeUpdateName.value = ''
+  }
+
+  if (
+    !latestName.value ||
+    beforeUpdateName.value === latestName.value
+  ) {
+    _withoutUpdate()
     return
   }
-  const nextFileInfo = { ...fileInfo }
-  if (fileInfo.updateName === updateName.value) {
+
+  if (validFilename.test(latestName.value)) {
+    _withoutUpdate()
+    init({ color: 'warning', message: '含有特殊字符，请修改后重试！' })
+    return
+  }
+
+  const nextFileInfo = { ...fileInfo.value }
+  if (fileInfo.value.updateName === latestName.value) {
     delete nextFileInfo.customName
   } else {
-    nextFileInfo.customName = updateName.value
+    nextFileInfo.customName = latestName.value
   }
   emits('change', nextFileInfo as IFileItem)
 }
@@ -60,9 +75,9 @@ const updateEditMode = (isEdit: boolean) => {
   }
 }
 
-watch(fileInfo, ({ customName, updateName: uname }) => {
-  updateName.value = customName ?? uname
-})
+watch(() => props.fileInfo, ({ customName, updateName }) => {
+  latestName.value = customName ?? updateName
+}, { deep: true })
 </script>
 
 <template>
@@ -75,9 +90,9 @@ watch(fileInfo, ({ customName, updateName: uname }) => {
       <div class="text-base text-slate-500 truncate" :title="fileInfo.originName">原文件名：{{ fileInfo.originName }}</div>
       <div class="h-8 leading-8">
         <input v-if="isEditMode" class="bg-transparent w-full border-y border-t-0 border-gray-400 border-solid"
-          ref="input" v-model="updateName" @blur="updateEditMode(false)" />
+          ref="input" v-model="latestName" @blur="updateEditMode(false)" />
         <div v-else @click="updateEditMode(true)" class="flex items-center">
-          <div class="truncate w-[90%]" :title="updateName">{{ updateName }}</div>
+          <div class="truncate w-[90%]" :title="latestName">{{ latestName }}</div>
           <va-icon v-if="!!fileInfo?.customName" :size="18" name="restart_alt" @click="onResetName" />
         </div>
       </div>

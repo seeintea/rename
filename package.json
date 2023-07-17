@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@tauri-apps/api": "^1.4.0",
+    "jszip": "^3.10.1",
     "material-icons": "^1.13.8",
     "mitt": "^3.0.1",
     "nanoid": "^4.0.2",
