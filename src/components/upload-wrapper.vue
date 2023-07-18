@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import { nanoid } from 'nanoid'
 import { useToast } from 'vuestic-ui'
+import { calc_file_hash as calcFileHash } from 'wasm-utils'
 import { IFileItem } from '@/helper/upload-files'
 import uploadItemWrapper from './upload-item-wrapper.vue'
 
@@ -9,34 +10,40 @@ const emits = defineEmits<{
   (e: 'upload', items: IFileItem[]): void
 }>()
 
-const fileHashMap = ref<Map<string, string>>()
+const fileHashMap = ref<Map<string, number>>(new Map())
 
 const { init } = useToast()
 
-const onUploadItems = (uploadItems: FileList) => {
+const onUploadItems = async (uploadItems: FileList) => {
   const items = Array.from(uploadItems)
   const pushItems: IFileItem[] = []
   let errorCount = 0
+  const task: Promise<void>[] = []
   items.forEach((file: File) => {
-    const { name, type } = file
-    // TODO support zip file
-    if (type.match('image')) {
-      // TODO use work calc hash
-      let originName = name
-      let suffix = ''
-      try {
-        const nameItems = name.split('.')
-        const len = nameItems.length - 1
-        originName = len === 1 ? nameItems[0] : nameItems.slice(0, len).join('.')
-        suffix = nameItems[len]
-      } catch (e) {
-        // TODO
+    task.push((async () => {
+      const { name, type } = file
+      const arrayBuffer = await file.arrayBuffer()
+      const hash = calcFileHash(new Uint8Array(arrayBuffer))
+      // TODO support zip file
+      if (type.match('image') && !fileHashMap.value.get(hash)) {
+        fileHashMap.value.set(hash, 1)
+        let originName = name
+        let suffix = ''
+        try {
+          const nameItems = name.split('.')
+          const len = nameItems.length - 1
+          originName = len === 1 ? nameItems[0] : nameItems.slice(0, len).join('.')
+          suffix = nameItems[len]
+        } catch (e) {
+          // TODO
+        }
+        pushItems.push({
+          id: nanoid(), type, url: URL.createObjectURL(file), originName, updateName: originName, suffix
+        })
       }
-      pushItems.push({
-        id: nanoid(), type, url: URL.createObjectURL(file), originName, updateName: originName, suffix
-      })
-    }
+    })())
   })
+  await Promise.all(task)
   if (errorCount) {
     const partCanBeUsed = errorCount !== items.length
     const color = partCanBeUsed ? 'warning' : 'danger'

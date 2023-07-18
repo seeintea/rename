@@ -26,6 +26,9 @@ dependencies:
   vuestic-ui:
     specifier: ^1.6.6
     version: 1.6.6(vue@3.2.45)
+  wasm-utils:
+    specifier: ./wasm/pkg
+    version: link:wasm/pkg
 
 devDependencies:
   '@commitlint/cli':
