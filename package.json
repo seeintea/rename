@@ -1,37 +1,27 @@
 {
-  "name": "renameasy",
+  "name": "rename",
   "private": true,
-  "version": "0.0.1",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview",
     "tauri": "tauri",
-    "prepare": "husky install"
+    "build:rutils": "ts-node-esm ./scripts/build.rutils.ts"
   },
   "dependencies": {
     "@tauri-apps/api": "^1.4.0",
-    "jszip": "^3.10.1",
-    "material-icons": "^1.13.8",
-    "mitt": "^3.0.1",
-    "nanoid": "^4.0.2",
-    "vue": "^3.2.45",
-    "vuestic-ui": "^1.6.6",
-    "wasm-utils": "./wasm/pkg"
+    "vue": "^3.3.4",
+    "rutils": "./rutils/pkg"
   },
   "devDependencies": {
-    "@commitlint/cli": "^17.6.5",
-    "@commitlint/config-conventional": "^17.6.5",
     "@tauri-apps/cli": "^1.4.0",
-    "@types/node": "^18.7.10",
-    "@vitejs/plugin-vue": "^4.0.0",
-    "autoprefixer": "^10.4.14",
-    "husky": "^8.0.3",
-    "postcss": "^8.4.24",
-    "tailwindcss": "^3.3.2",
-    "typescript": "^4.9.5",
-    "vite": "^4.2.3",
-    "vue-tsc": "^1.0.11"
+    "@types/node": "^20.5.9",
+    "@vitejs/plugin-vue": "^4.2.3",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.2",
+    "vite": "^4.4.4",
+    "vue-tsc": "^1.8.5"
   }
 }

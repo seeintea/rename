@@ -23,4 +23,5 @@ dist-ssr
 *.sln
 *.sw?
 
-wasm/target
+rutils/pkg
+rutils/target
