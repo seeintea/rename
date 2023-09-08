@@ -12,13 +12,16 @@
   },
   "dependencies": {
     "@tauri-apps/api": "^1.4.0",
-    "vue": "^3.3.4",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "rutils": "./rutils/pkg"
   },
   "devDependencies": {
     "@tauri-apps/cli": "^1.4.0",
     "@types/node": "^20.5.9",
-    "@vitejs/plugin-vue": "^4.2.3",
+    "@types/react": "^18.2.15",
+    "@types/react-dom": "^18.2.7",
+    "@vitejs/plugin-react": "^4.0.3",
     "ts-node": "^10.9.1",
     "typescript": "^5.0.2",
     "vite": "^4.4.4",
