@@ -1,0 +1,45 @@
+$btn-transition: 0.2s ease;
+
+.button {
+  outline: 0;
+  border: 0;
+  padding: 4px 16px;
+  text-align: center;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background $btn-transition;
+  position: relative;
+  color: #ffffff;
+  line-height: 1.5;
+}
+
+.btn-primary {
+  $primary-color: #212121;
+  $secondary-color: #545454;
+
+  background: $primary-color;
+
+  &:hover {
+    background: $secondary-color;
+  }
+
+  &:active {
+    background: $primary-color;
+  }
+
+  &::after {
+    content: '';
+    border-radius: inherit;
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: 0.2s;
+  }
+
+  &:active::after {
+    box-shadow: none;
+    opacity: 0.2;
+    box-shadow: 0 0 0 4px $primary-color;
+    transition: 0;
+  }
+}

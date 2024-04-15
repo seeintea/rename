@@ -1,0 +1,10 @@
+.container {
+  $var-padding: 8px;
+  place-self: center;
+  width: 500px;
+  height: 400px;
+  box-sizing: border-box;
+  padding: $var-padding;
+  display: grid;
+  grid-template-columns: calc(260px - $var-padding) calc(240px - $var-padding);
+}

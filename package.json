@@ -1,30 +1,27 @@
 {
   "name": "rename",
   "private": true,
-  "version": "1.0.0",
+  "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc --noEmit && vite build",
+    "build": "tsc && vite build",
     "preview": "vite preview",
-    "tauri": "tauri",
-    "build:rutils": "ts-node-esm ./scripts/build.rutils.ts"
+    "tauri": "tauri"
   },
   "dependencies": {
-    "@tauri-apps/api": "^1.4.0",
+    "@tauri-apps/api": ">=2.0.0-beta.0",
+    "@tauri-apps/plugin-shell": ">=2.0.0-beta.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "rutils": "./rutils/pkg"
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@tauri-apps/cli": "^1.5.6",
-    "@types/node": "^20.5.9",
+    "@tauri-apps/cli": ">=2.0.0-beta.0",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
-    "@vitejs/plugin-react": "^4.0.3",
-    "ts-node": "^10.9.1",
+    "@vitejs/plugin-react": "^4.2.1",
+    "sass": "^1.75.0",
     "typescript": "^5.0.2",
-    "vite": "^4.5.3",
-    "vue-tsc": "^1.8.5"
+    "vite": "^5.0.0"
   }
 }
